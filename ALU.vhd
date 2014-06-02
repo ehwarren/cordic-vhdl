@@ -29,6 +29,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+--Comment added by austin warren
+
 entity ALU is
 
 port(	inX:	in std_logic_vector(31 downto 0);
