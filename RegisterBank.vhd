@@ -33,9 +33,9 @@ entity RegisterBank is
 	Generic	( RegSize  : natural := 3;			
 				  DataSize : natural := 32
 				);
-    Port ( clock : in bit;
-			  wr		: in bit; -- write/read flag. '0' is write, '1' is read
-			  en		: in bit; -- enable bit
+    Port ( clock : in std_logic;
+			  wr		: in std_logic; -- write/read flag. '0' is write, '1' is read
+			  en		: in std_logic; -- enable bit
 			  X_in : in  std_logic_vector(DataSize - 1 downto 0);
            Y_in : in  std_logic_vector(DataSize - 1 downto 0);
            Z_in : in  std_logic_vector(DataSize - 1 downto 0);

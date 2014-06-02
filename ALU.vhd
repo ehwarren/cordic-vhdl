@@ -38,10 +38,10 @@ port(	inX:	in std_logic_vector(31 downto 0);
 		inZ: in std_logic_vector(31 downto 0);
 		i: in integer; -- iteration number
 		theta : in std_logic_vector(31 downto 0);
-		reset: in bit; -- may not be needed
-		en : in bit;
+		reset: in std_logic; -- may not be needed
+		en : in std_logic;
 		addSub:	in std_logic; -- add or subtract addSub. addSub '0' x and z are addition, y is subtraction. addSub '1' is vice versa
-		clock: in bit;
+		clock: in std_logic;
 		result_X:	out std_logic_vector(31 downto 0);
 		result_Y:	out std_logic_vector(31 downto 0); 
 		result_Z:	out std_logic_vector(31 downto 0)  		

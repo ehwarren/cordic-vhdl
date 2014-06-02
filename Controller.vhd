@@ -31,12 +31,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Controller is
 
-		Port ( clock : in bit;
+		Port ( clock : in std_logic;
 				 mode	 : in std_logic_vector (1 downto 0); -- '00' is linear, '01' is circular, '10' hyperbolic, '11' is nothing
-				 op	 : in bit; -- '0' rotation or '1' vectoring
-				 start : in bit;
-				 reset : in bit;
-				 done	 : out bit
+				 op	 : in std_logic; -- '0' rotation or '1' vectoring
+				 start : in std_logic;
+				 reset : in std_logic;
+				 done	 : out std_logic
 			  );
 
 end Controller;
