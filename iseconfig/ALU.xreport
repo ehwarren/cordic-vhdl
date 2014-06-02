@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2014-06-02T14:36:47</DateModified>
+  <DateModified>2014-06-02T15:36:58</DateModified>
   <ModuleName>ALU</ModuleName>
   <SummaryTimeStamp>2014-06-02T14:34:22</SummaryTimeStamp>
-  <SavedFilePath>/home/rdupless/ceng441/cordic-vhdl/iseconfig/ALU.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/rdupless/ceng441/cordic-vhdl/</ImplementationReportsDirectory>
+  <SavedFilePath>/home/austin/441/cordic-vhdl/iseconfig/ALU.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/austin/441/cordic-vhdl/</ImplementationReportsDirectory>
   <DateInitialized>2014-05-26T13:15:16</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
