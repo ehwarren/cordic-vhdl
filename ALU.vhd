@@ -19,7 +19,9 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+--use IEEE.STD_LOGIC_SIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
+--use IEEE.STD_LOGIC_ARITH.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -33,18 +35,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity ALU is
 
-port(	inX:	in std_logic_vector(31 downto 0);
-		inY:	in std_logic_vector(31 downto 0);
-		inZ: in std_logic_vector(31 downto 0);
+port(	inX:	in signed(31 downto 0);
+		inY:	in signed(31 downto 0);
+		inZ: in signed(31 downto 0);
 		i: in integer; -- iteration number
 		theta : in std_logic_vector(31 downto 0);
 		reset: in std_logic; -- may not be needed
 		en : in std_logic;
 		addSub:	in std_logic; -- add or subtract addSub. addSub '0' x and z are addition, y is subtraction. addSub '1' is vice versa
 		clock: in std_logic;
-		result_X:	out std_logic_vector(31 downto 0);
-		result_Y:	out std_logic_vector(31 downto 0); 
-		result_Z:	out std_logic_vector(31 downto 0)  		
+		result_X:	out signed(31 downto 0);
+		result_Y:	out signed(31 downto 0); 
+		result_Z:	out signed(31 downto 0)  		
 );
 
 end ALU;
@@ -61,12 +63,12 @@ begin
 		if en = '1' then
 			if (clock = '1' and clock'event) then 
 				case addSub is
-					 when "0" =>
-						result_X <= inX + (inY srl i); -- Addition of Input 1 and Input 2
-					 when "1" =>						
-						result_X <= inX - (inY srl i); -- 2's compliment subtraction of Input 1 and Input 2
+					 when '0' =>
+						result_X <= inX + shift_right(inY,i); -- Addition of Input 1 and Input 2
+					 when '1' =>						
+						result_X <= inX - shift_right(inY,i); -- 2's compliment subtraction of Input 1 and Input 2
 					 when others =>	 
-						result_X <= "XX"; -- nop
+						result_X <= x"00000000"; -- nop
 					  end case;
 			end if;
 		end if;
@@ -80,12 +82,12 @@ begin
 		if en = '1' then
 			if (clock = '1' and clock'event) then 
 				case addSub is
-					 when "1" =>
-						result_Y <= inY + (inX srl i); -- Addition of Input 1 and Input 2
-					 when "0" =>						
-						result_Y <= inY - (inX srl i); -- 2's compliment subtraction of Input 1 and Input 2
+					 when '1' =>
+						result_Y <= inY + shift_right(inX,i); -- Addition of Input 1 and Input 2
+					 when '0' =>						
+						result_Y <= inY - shift_right(inX,i); -- 2's compliment subtraction of Input 1 and Input 2
 					 when others =>	 
-						result_Y <= "XX"; -- nop
+						result_Y <= x"00000000"; -- nop
 					  end case;
 			end if;
 		end if;
@@ -100,12 +102,12 @@ begin
 			if (clock = '1' and clock'event) then 
 
 				case addSub is
-					 when "0" =>
-						result_Z <= inZ + theta ; -- Addition of Input 1 and Input 2
-					 when "1" =>						
-						result_Z <= inZ - theta; -- 2's compliment subtraction of Input 1 and Input 2
+					 when '0' =>
+						result_Z <= inZ + signed(theta) ; -- Addition of Input 1 and Input 2
+					 when '1' =>						
+						result_Z <= inZ - signed(theta); -- 2's compliment subtraction of Input 1 and Input 2
 					 when others =>	 
-						result_Z <= "XX"; -- nop
+						result_Z <= x"00000000"; -- nop
 					  end case;
 			end if;
 		end if;
