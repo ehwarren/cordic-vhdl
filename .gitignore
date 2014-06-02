@@ -22,3 +22,5 @@
 *.lst
 *.xmsgs
 *.xbcd
+*.ref
+*.vho
