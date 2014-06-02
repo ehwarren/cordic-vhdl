@@ -12,3 +12,13 @@
 *.ngc
 *.lso
 *.cmd_log
+*.bld
+*.ngd
+*.pcf
+*.map
+*.mrp
+*.ncd
+*.ngm
+*.lst
+*.xmsgs
+*.xbcd
