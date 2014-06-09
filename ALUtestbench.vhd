@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   14:12:09 06/02/2014
+-- Create Date:   13:58:38 06/09/2014
 -- Design Name:   
--- Module Name:   /home/rdupless/ceng441/cordic-vhdl/ALUtestbench.vhd
+-- Module Name:   M:/ceng441/cordic-vhdl/ALUTestbench.vhd
 -- Project Name:  CORDIC
 -- Target Device:  
 -- Tool versions:  
@@ -27,15 +27,16 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+use ieee.NUMERIC_STD.ALL;
  
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY ALUtestbench IS
-END ALUtestbench;
+ENTITY ALUTestbench IS
+END ALUTestbench;
  
-ARCHITECTURE behavior OF ALUtestbench IS 
+ARCHITECTURE behavior OF ALUTestbench IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
@@ -44,7 +45,7 @@ ARCHITECTURE behavior OF ALUtestbench IS
          inX : IN  std_logic_vector(31 downto 0);
          inY : IN  std_logic_vector(31 downto 0);
          inZ : IN  std_logic_vector(31 downto 0);
-         i : IN  std_logic;
+         i : IN  std_logic_vector(4 downto 0);
          theta : IN  std_logic_vector(31 downto 0);
          reset : IN  std_logic;
          en : IN  std_logic;
@@ -61,7 +62,7 @@ ARCHITECTURE behavior OF ALUtestbench IS
    signal inX : std_logic_vector(31 downto 0) := (others => '0');
    signal inY : std_logic_vector(31 downto 0) := (others => '0');
    signal inZ : std_logic_vector(31 downto 0) := (others => '0');
-   signal i : std_logic := '0';
+   signal i : std_logic_vector(4 downto 0) := (others => '0');
    signal theta : std_logic_vector(31 downto 0) := (others => '0');
    signal reset : std_logic := '0';
    signal en : std_logic := '0';
@@ -105,25 +106,46 @@ BEGIN
  
 
    -- Stimulus process
-   stim_proc: process
+   stim_proc: process is 
+	variable A, B: integer;
    begin		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
 
       wait for clock_period*10;
+		A := 1;
+		B := 4;
+      -- insert stimulus here 
+		en <= '1';
+		i <= "00001";
+		addSub <= '0';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+		wait for clock_period*10;
+		assert signed(result_X) = (A+(B/(2**to_integer(signed(i)))))
+			report "Result was not 2"
+			severity warning;
+			
+		wait for clock_period*10;
 
       -- insert stimulus here 
 		en <= '1';
-		i <= 2;
-		addSub <= 0;
-		inX <= (31 downto 1 => 0,
-					0 => 1);
-		inY <= (31 downto 2 => 0,
-					1 => 1
-					0 => 0);
-		inZ <= (31 downto 0 => 0);
-		theta <= (31 downto 1 => 0,
-					0 => 1);
+		i <= "00001";
+		addSub <= '1';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+		wait for clock_period*2;
+		assert signed(result_X) = (A-(B/(2**to_integer(signed(i)))))
+			report "Expected " & integer'image(A-(B/(2**to_integer(signed(i))))) & 
+							" got " & integer'image(to_integer(signed(result_X)))
+			severity warning;
+			
+		--add more test cases
+		
       wait;
    end process;
 
