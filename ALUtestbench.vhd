@@ -57,6 +57,7 @@ ARCHITECTURE behavior OF ALUTestbench IS
         );
     END COMPONENT;
     
+	 --test comment
 
    --Inputs
    signal inX : std_logic_vector(31 downto 0) := (others => '0');
