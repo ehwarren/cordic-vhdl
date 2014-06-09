@@ -1,14 +1,14 @@
-Running: C:\Xilinx\13.4\ISE_DS\ISE\bin\nt\unwrapped\fuse.exe -intstyle ise -incremental -o M:/ceng441/cordic-vhdl/ALUTestbench_isim_beh.exe -prj M:/ceng441/cordic-vhdl/ALUTestbench_beh.prj ALUTestbench 
+Running: C:\Xilinx\13.4\ISE_DS\ISE\bin\nt\unwrapped\fuse.exe -intstyle ise -incremental -o M:/441/cordic-vhdl/ALUTestbench_isim_beh.exe -prj M:/441/cordic-vhdl/ALUTestbench_beh.prj work.ALUTestbench 
 ISim O.87xd (signature 0x2f00eba5)
 Number of CPUs detected in this system: 4
 Turning on mult-threading, number of parallel sub-compilation jobs: 8 
 Determining compilation order of HDL files
-Parsing VHDL file "M:/ceng441/cordic-vhdl/ALU.vhd" into library work
-Parsing VHDL file "M:/ceng441/cordic-vhdl/ALUtestbench.vhd" into library work
+Parsing VHDL file "M:/441/cordic-vhdl/ALU.vhd" into library work
+Parsing VHDL file "M:/441/cordic-vhdl/ALUtestbench.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 101544 KB
-Fuse CPU Usage: 358 ms
+Fuse Memory Usage: 101608 KB
+Fuse CPU Usage: 311 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package numeric_std
@@ -17,6 +17,6 @@ Compiling architecture behavior of entity alutestbench
 Time Resolution for simulation is 1ps.
 Waiting for 1 sub-compilation(s) to finish...
 Compiled 6 VHDL Units
-Built simulation executable M:/ceng441/cordic-vhdl/ALUTestbench_isim_beh.exe
-Fuse Memory Usage: 136664 KB
-Fuse CPU Usage: 576 ms
+Built simulation executable M:/441/cordic-vhdl/ALUTestbench_isim_beh.exe
+Fuse Memory Usage: 135704 KB
+Fuse CPU Usage: 483 ms

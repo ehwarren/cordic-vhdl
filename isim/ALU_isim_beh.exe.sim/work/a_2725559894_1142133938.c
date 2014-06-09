@@ -30,7 +30,7 @@ char *ieee_p_1242562249_sub_3273497107_1035706684(char *, char *, char *, char *
 char *ieee_p_1242562249_sub_3273568981_1035706684(char *, char *, char *, char *, char *, char *);
 
 
-static void work_a_0832606739_1142133938_p_0(char *t0)
+static void work_a_2725559894_1142133938_p_0(char *t0)
 {
     char t11[16];
     char t14[16];
@@ -186,7 +186,7 @@ LAB14:    xsi_set_current_line(78, ng0);
 
 }
 
-static void work_a_0832606739_1142133938_p_1(char *t0)
+static void work_a_2725559894_1142133938_p_1(char *t0)
 {
     char t11[16];
     char t14[16];
@@ -342,7 +342,7 @@ LAB14:    xsi_set_current_line(104, ng0);
 
 }
 
-static void work_a_0832606739_1142133938_p_2(char *t0)
+static void work_a_2725559894_1142133938_p_2(char *t0)
 {
     char t11[16];
     char *t1;
@@ -488,9 +488,9 @@ LAB14:    xsi_set_current_line(131, ng0);
 }
 
 
-extern void work_a_0832606739_1142133938_init()
+extern void work_a_2725559894_1142133938_init()
 {
-	static char *pe[] = {(void *)work_a_0832606739_1142133938_p_0,(void *)work_a_0832606739_1142133938_p_1,(void *)work_a_0832606739_1142133938_p_2};
-	xsi_register_didat("work_a_0832606739_1142133938", "isim/ALUTestbench_isim_beh.exe.sim/work/a_0832606739_1142133938.didat");
+	static char *pe[] = {(void *)work_a_2725559894_1142133938_p_0,(void *)work_a_2725559894_1142133938_p_1,(void *)work_a_2725559894_1142133938_p_2};
+	xsi_register_didat("work_a_2725559894_1142133938", "isim/ALU_isim_beh.exe.sim/work/a_2725559894_1142133938.didat");
 	xsi_register_executes(pe);
 }

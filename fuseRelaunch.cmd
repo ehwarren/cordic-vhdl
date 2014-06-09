@@ -1,1 +1,1 @@
--intstyle "ise" -incremental -o "M:/ceng441/cordic-vhdl/ALUTestbench_isim_beh.exe" -prj "M:/ceng441/cordic-vhdl/ALUTestbench_beh.prj" "ALUTestbench" 
+-intstyle "ise" -incremental -o "M:/441/cordic-vhdl/ALUTestbench_isim_beh.exe" -prj "M:/441/cordic-vhdl/ALUTestbench_beh.prj" "work.ALUTestbench" 

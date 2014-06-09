@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="M:/441/cordic-vhdl/ALUTestbench_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="alutestbench" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="13" />
+   <wvobject fp_name="/alutestbench/inx" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">inx[31:0]</obj_property>
+      <obj_property name="ObjectShortName">inx[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/iny" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">iny[31:0]</obj_property>
+      <obj_property name="ObjectShortName">iny[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/inz" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">inz[31:0]</obj_property>
+      <obj_property name="ObjectShortName">inz[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">i[4:0]</obj_property>
+      <obj_property name="ObjectShortName">i[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/theta" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">theta[31:0]</obj_property>
+      <obj_property name="ObjectShortName">theta[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">en</obj_property>
+      <obj_property name="ObjectShortName">en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/addsub" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">addsub</obj_property>
+      <obj_property name="ObjectShortName">addsub</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/result_x" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">result_x[31:0]</obj_property>
+      <obj_property name="ObjectShortName">result_x[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/result_y" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">result_y[31:0]</obj_property>
+      <obj_property name="ObjectShortName">result_y[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/result_z" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">result_z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">result_z[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/alutestbench/clock_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clock_period</obj_property>
+      <obj_property name="ObjectShortName">clock_period</obj_property>
+   </wvobject>
+</wave_config>
