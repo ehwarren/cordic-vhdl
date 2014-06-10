@@ -1,7 +1,7 @@
 %Generator for theta values, currently only generates circular values
-for i=0:31
+for i=0:31 %For hyperbolic: 0:31 --> 1:32
     delta = 2^(-i);
-    theta = atan(delta);
+    theta = atan(delta); %For hyperbolic: atan --> atanh
     %fprintf('Iteration: %i, Delta: %32.31f, Radians: %32.31f \n', i, delta, theta);
     t = round(2^30*theta);
     [~,e] = log2(t);
