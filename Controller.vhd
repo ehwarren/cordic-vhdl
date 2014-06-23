@@ -1,3 +1,15 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    14:51:33 05/26/2014 
+-- Design Name: 
+-- Module Name:    Controller - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
 -- Dependencies: 
 --
 -- Revision: 
@@ -31,6 +43,7 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 				 X		 : in std_logic_vector(31 downto 0); 
 				 Y		 : in std_logic_vector(31 downto 0); 
 				 Z		 : in std_logic_vector(31 downto 0); 
+				 m		 : out std_logic_vector (1 downto 0); -- Mode out
 				 en	 : out std_logic; -- enable for memory
 				 wr 	 : out std_logic; -- read flag for memory
 				 i		 : out std_logic_vector (n - 1 downto 0); -- current iteration
@@ -105,7 +118,7 @@ begin
 --zi+1 = zi - (Mew)i * (theta)i 
 --
 --binary point is after the second MSB (sign bit, bit, binary point, frac bit, frac bit, frac bit....)
---
+--'00' is linear, '01' is circular, '10' hyperbolic, '11' is nothing
 	OutP: process(current_state) is -- Output process
 	variable repeat: boolean := true; -- checks if hyperbolic iteration is to be repeated
 	begin
@@ -113,30 +126,30 @@ begin
 			case current_state is
 				when RLinear => 
 				-- i = 0,1,2...n-1. n, for this project, is 32
-				--	m <= 0;
+					m <= "00";
 				
 					i <= conv_std_logic_vector (count, 32);
 					count <= count + 1;
 				when VLinear =>
-				--	m <= 0;
+					m <= "00";
 				
 					i <= conv_std_logic_vector(count, 32);
 					count <= count + 1;
 				when RCircular => 
 				-- i = 0,1,2...n-1
-				--	m <= 1;
+					m <= "01";
 				
 					i <= conv_std_logic_vector(count, 32);
 					count <= count + 1;
 				when VCircular =>
-				--	m <= 1;
+					m <= "01";
 				
 					i <= conv_std_logic_vector(count, 32);
 					count <= count + 1;
 				when RHyperbolic => 
 				-- hyperbolic iterations repeat at i = 4, 13 for n = 32. i = 1,2...n-1
 				-- iteration repeats given by i = (3^(j+1)-1)/2 for j = 1,2,3...
-				--	m <= -1;
+					m <= "10";
 					
 
 					if (count = 4 or count = 13) and repeat = true then
@@ -153,7 +166,7 @@ begin
 					end if;
 					
 				when VHyperbolic =>
-				--	m <= -1;
+					m <= "10";
 				
 				
 					if (count = 4 or count = 13) and repeat = true then
