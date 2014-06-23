@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -37,7 +38,7 @@ port(	clock	   : in std_logic;
 		mode		: in std_logic_vector(1 downto 0);	-- 0 is circular or 1 is hyperbolic table
 		en			: in std_logic;	-- enable
 --		r			: in std_logic;	-- read. design decision needs to be made about read
-		i			: in integer; -- iteration number/address
+		i			: in STD_LOGIC_VECTOR(4 downto 0); -- iteration number/address
 		theta		: out std_logic_vector(data_width - 1 downto 0)
 );
 end ROM;
@@ -126,9 +127,9 @@ begin
 			if en = '1' then
 				--if( r = '1' ) then -- design decision needs to be made about read
 					if mode = "01" then -- circular
-							theta <= Circular(i);
+							theta <= Circular(to_integer(unsigned(i)));
 						elsif mode = "10" then -- hyperbolic
-							theta <= Hyperbolic(i);
+							theta <= Hyperbolic(to_integer(unsigned(i)));
 						else 
 							theta <= "0"; -- 32 bit representation needed
 					end if;
