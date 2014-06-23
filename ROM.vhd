@@ -36,7 +36,7 @@ entity ROM is
 port(	clock	   : in std_logic;
 		mode		: in std_logic_vector(1 downto 0);	-- 0 is circular or 1 is hyperbolic table
 		en			: in std_logic;	-- enable
-		r			: in std_logic;	-- read. design decision needs to be made about read
+--		r			: in std_logic;	-- read. design decision needs to be made about read
 		i			: in integer; -- iteration number/address
 		theta		: out std_logic_vector(data_width - 1 downto 0)
 );
