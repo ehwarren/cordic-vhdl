@@ -124,7 +124,7 @@ begin
 	begin
 		if (clock = '1' and clock'event) then
 			if en = '1' then
-				if( r = '1' ) then -- design decision needs to be made about read
+				--if( r = '1' ) then -- design decision needs to be made about read
 					if mode = "01" then -- circular
 							theta <= Circular(i);
 						elsif mode = "10" then -- hyperbolic
@@ -132,10 +132,11 @@ begin
 						else 
 							theta <= "0"; -- 32 bit representation needed
 					end if;
-				else
+				--else
+			else
 				  theta <= "0"; -- 32 bit representation needed
-				end if;
-		  end if;
+				--end if;
+		  	end if;
 		end if;
 	end process;
 end Behavioral;
