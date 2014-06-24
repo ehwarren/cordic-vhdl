@@ -46,7 +46,8 @@ port(	inX : IN  std_logic_vector(31 downto 0);
 		clock: in std_logic;
       result_X : OUT  std_logic_vector(31 downto 0);
       result_Y : OUT  std_logic_vector(31 downto 0);
-      result_Z : OUT  std_logic_vector(31 downto 0) 		
+      result_Z : OUT  std_logic_vector(31 downto 0);
+		wr		 	: out std_logic -- write flag. '1' is write enabled. 		
 );
 
 end ALU;

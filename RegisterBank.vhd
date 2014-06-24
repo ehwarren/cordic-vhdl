@@ -34,7 +34,7 @@ entity RegisterBank is
 				  DataSize : natural := 32
 				);
     Port ( clock : in std_logic;
-			  wr		: in std_logic; -- write/read flag. '0' is write, '1' is read
+			  wr		: in std_logic; -- write/read flag. '1' is write
 			  en		: in std_logic; -- enable bit
 			  X_in : in  std_logic_vector(DataSize - 1 downto 0);
            Y_in : in  std_logic_vector(DataSize - 1 downto 0);
@@ -53,21 +53,21 @@ begin
 
 	process(clock)
 	begin
+		
+	
 	
 		if clock = '1' and clock'event then
 		
 			if en = '1' then
 				
-				if wr = '0' then -- write mode
+				if wr = '1' then -- write mode
 					Reg(0) <= X_in;
 					Reg(1) <= Y_in;
 					Reg(2) <= Z_in;
-				elsif wr = '1' then -- read mode
-					X_out <= Reg(0);
-					Y_out <= Reg(1);
-					Z_out <= Reg(2); 
 				end if;
-				
+				X_out <= Reg(0);
+				Y_out <= Reg(1);
+				Z_out <= Reg(2); 
 			end if;
 			
 		end if;
