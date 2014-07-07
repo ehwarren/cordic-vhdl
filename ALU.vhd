@@ -41,7 +41,6 @@ port(	inX : IN  std_logic_vector(31 downto 0);
 		i: IN std_logic_vector(4 downto 0); -- iteration number
 		theta : in std_logic_vector(31 downto 0);
 		reset: in std_logic; -- may not be needed
-		en : in std_logic;
 		addSub:	in std_logic; -- add or subtract addSub. addSub '0' x and z are addition, y is subtraction. addSub '1' is vice versa
       result_X : OUT  std_logic_vector(31 downto 0);
       result_Y : OUT  std_logic_vector(31 downto 0);
@@ -61,7 +60,6 @@ begin
     
 	-- use case statement to achieve 
 	-- different operations of ALU
-		if en = '1' then
 			signed_X := signed(inX);
 			signed_Y := signed(inY);
 			signed_Z := signed(inZ);
@@ -74,7 +72,6 @@ begin
 					 when others =>	 
 						result_X <= x"00000000"; -- nop
 					  end case;
-		end if;
     end process pX;
 	 
 	 pY : process(i) is
@@ -84,7 +81,6 @@ begin
     
 	-- use case statement to achieve 
 	-- different operations of ALU
-		if en = '1' then
 			signed_X := signed(inX);
 			signed_Y := signed(inY);
 			signed_Z := signed(inZ);
@@ -97,7 +93,6 @@ begin
 					 when others =>	 
 						result_Y <= x"00000000"; -- nop
 					  end case;
-		end if;
     end process pY;
 
     pZ : process(theta) is
@@ -107,7 +102,6 @@ begin
     
 	-- use case statement to achieve 
 	-- different operations of ALU
-		if en = '1' then
 			signed_X := signed(inX);
 			signed_Y := signed(inY);
 			signed_Z := signed(inZ);
@@ -120,7 +114,6 @@ begin
 					 when others =>	 
 						result_Z <= x"00000000"; -- nop
 					  end case;
-		end if;
     end process pZ;
 
 
