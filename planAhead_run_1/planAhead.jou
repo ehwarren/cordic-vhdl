@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# PlanAhead v13.4
+# Build 157570 by hdbuild on Fri Dec 16 12:55:36 MST 2011
+# Start of session at: Mon Jun 23 15:07:47 2014
+# Process ID: 1456
+# Log file: M:/441/cordic-vhdl/planAhead_run_1/planAhead.log
+# Journal file: M:/441/cordic-vhdl/planAhead_run_1/planAhead.jou
+#-----------------------------------------------------------
+start_gui
+source M:/441/cordic-vhdl/pa.fromHdl.tcl
+startgroup
+set_property loc IPAD29 [get_ports clock]

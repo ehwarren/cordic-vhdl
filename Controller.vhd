@@ -40,18 +40,18 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 				 op	 : in std_logic; -- '0' rotation or '1' vectoring
 				 start : in std_logic; -- start to be included in controller logic.
 				 reset : in std_logic;
-				 X		 : in std_logic_vector(31 downto 0); 
-				 Y		 : in std_logic_vector(31 downto 0); 
-				 Z		 : in std_logic_vector(31 downto 0);
-				 m		 : out std_logic_vector (1 downto 0); -- Mode out
-				 en	 : out std_logic; -- enable for memory
-				 -- wr 	 : out std_logic; -- read flag for memory
+				 X		 : in std_logic_vector(31 downto 0); 	-- FROM ALU 
+				 Y		 : in std_logic_vector(31 downto 0); 	-- FROM ALU
+				 Z		 : in std_logic_vector(31 downto 0);    -- FROM ALU
+				 m		 : out std_logic_vector (1 downto 0); 	-- Mode out
+				 en	 : out std_logic; 				-- enable for memory
+				 -- wr 	 : out std_logic; 				-- read flag for memory
 				 i		 : out std_logic_vector (n - 1 downto 0); -- current iteration
-				 done	 : out std_logic;
-				 addSub: out std_logic; -- Mode out
-				 Xout	 : out std_logic_vector(31 downto 0); 
-				 Yout	 : out std_logic_vector(31 downto 0); 
-				 Zout	 : out std_logic_vector(31 downto 0)
+				 done	 : out std_logic;				-- signals that final output is complete
+				 addSub  : out std_logic; 				-- Mode out
+				 Xout	 : out std_logic_vector(31 downto 0); 		-- Final Result
+				 Yout	 : out std_logic_vector(31 downto 0); 		-- ..
+				 Zout	 : out std_logic_vector(31 downto 0) 		-- ..
 			  );
 
 end Controller;

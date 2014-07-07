@@ -1,0 +1,36 @@
+#-----------------------------------------------------------
+# PlanAhead v13.4
+# Build 157570 by hdbuild on Fri Dec 16 12:55:36 MST 2011
+# Start of session at: Mon Jun 23 15:10:05 2014
+# Process ID: 2724
+# Log file: M:/441/cordic-vhdl/planAhead_run_2/planAhead.log
+# Journal file: M:/441/cordic-vhdl/planAhead_run_2/planAhead.jou
+#-----------------------------------------------------------
+start_gui
+source M:/441/cordic-vhdl/pa.fromHdl.tcl
+startgroup
+set_property loc IPAD29 [get_ports clock]
+endgroup
+startgroup
+set_property loc IPAD59 [get_ports start]
+endgroup
+startgroup
+set_property loc IPAD64 [get_ports reset]
+endgroup
+set_property loc "" [get_ports [list  start]]
+startgroup
+set_property loc IPAD78 [get_ports start]
+endgroup
+startgroup
+set_property loc IPAD83 [get_ports op]
+endgroup
+startgroup
+set_property loc IPAD88 [get_ports {mode[1]}]
+endgroup
+startgroup
+set_property loc IPAD93 [get_ports {mode[0]}]
+endgroup
+save_design
+refresh_design
+exit
+stop_gui
