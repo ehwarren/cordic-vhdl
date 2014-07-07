@@ -76,7 +76,7 @@ begin
 	begin
 		if rising_edge(clock) then
 			if current_state = InitialState or current_state = DoneState then
-			 if start = '1' then
+			 	if start = '1' then
 					case op is
 						when '0' => -- rotational
 							if mode = "00" then
@@ -102,7 +102,7 @@ begin
 							next_state <= current_state;
 					end case;
 				else 
-				 next_state <= current_state;
+					next_state <= current_state;
 				end if;
 			elsif count = 32 then
 				next_state <= DoneState;
@@ -198,7 +198,10 @@ begin
 					end if;
 					en <= '1';
 					done <= '0';
-					if (count = 4 or count = 13) and repeat = true then
+					if (count = 0) then
+						i <= conv_std_logic_vector(1,5);
+						count <= 2;
+					elsif (count = 4 or count = 13) and repeat = true then
 						i <= conv_std_logic_vector(count, 5);
 						repeat := false;
 					else
@@ -220,7 +223,10 @@ begin
 						addSub <= '0';
 					end if;
 					en <= '1';
-					done <= '0';				
+					done <= '0';
+					if (count = 0) then
+						i <= conv_std_logic_vector(1,5);
+						count <= 2;			
 					if (count = 4 or count = 13) and repeat = true then
 						i <= conv_std_logic_vector(count, 5);
 						repeat := false;
