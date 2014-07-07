@@ -44,7 +44,7 @@ port(	inX : IN  std_logic_vector(31 downto 0);
 		addSub:	in std_logic; -- add or subtract addSub. addSub '0' x and z are addition, y is subtraction. addSub '1' is vice versa
       result_X : OUT  std_logic_vector(31 downto 0);
       result_Y : OUT  std_logic_vector(31 downto 0);
-      result_Z : OUT  std_logic_vector(31 downto 0);
+      result_Z : OUT  std_logic_vector(31 downto 0)
 );
 
 end ALU;
@@ -53,8 +53,8 @@ architecture behv of ALU is
 begin			
 		   
 	 
-    pX : process(i) is
-	 variable signed_X,signed_Y,signed_Z: signed(31 downto 0);
+    pX : process(i,inX,inY) is
+	 variable signed_X,signed_Y: signed(31 downto 0);
 	 variable iteration :integer;
     begin
     
@@ -62,7 +62,6 @@ begin
 	-- different operations of ALU
 			signed_X := signed(inX);
 			signed_Y := signed(inY);
-			signed_Z := signed(inZ);
 			iteration := to_integer(unsigned(i)); 
 				case addSub is
 					 when '0' =>
@@ -74,8 +73,8 @@ begin
 					  end case;
     end process pX;
 	 
-	 pY : process(i) is
-	 variable signed_X,signed_Y,signed_Z: signed(31 downto 0);
+	 pY : process(i,inX,inY) is
+	 variable signed_X,signed_Y: signed(31 downto 0);
 	 variable iteration :integer;
     begin
     
@@ -83,7 +82,6 @@ begin
 	-- different operations of ALU
 			signed_X := signed(inX);
 			signed_Y := signed(inY);
-			signed_Z := signed(inZ);
 			iteration := to_integer(unsigned(i)); 
 				case addSub is
 					 when '1' =>
@@ -95,15 +93,13 @@ begin
 					  end case;
     end process pY;
 
-    pZ : process(theta) is
-	 variable signed_X,signed_Y,signed_Z: signed(31 downto 0);
+    pZ : process(theta,inZ) is
+	 variable signed_Z: signed(31 downto 0);
 	 variable iteration :integer;
     begin
     
 	-- use case statement to achieve 
 	-- different operations of ALU
-			signed_X := signed(inX);
-			signed_Y := signed(inY);
 			signed_Z := signed(inZ);
 			iteration := to_integer(unsigned(i)); 
 				case addSub is

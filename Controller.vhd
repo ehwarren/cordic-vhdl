@@ -44,8 +44,6 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 				 Y		 : in std_logic_vector(31 downto 0); 	-- FROM ALU
 				 Z		 : in std_logic_vector(31 downto 0);    -- FROM ALU
 				 m		 : out std_logic_vector (1 downto 0); 	-- Mode out
-				 en	 : out std_logic; 				-- enable for memory
-				 -- wr 	 : out std_logic; 				-- read flag for memory
 				 i		 : out std_logic_vector (n - 1 downto 0); -- current iteration
 				 done	 : out std_logic;				-- signals that final output is complete
 				 addSub  : out std_logic; 				-- Mode out
@@ -60,7 +58,7 @@ architecture Behavioral of Controller is
 	type state is (InitialState, VLinear, RLinear, VCircular, RCircular, VHyperbolic, RHyperbolic, DoneState);
 	signal current_state: state := InitialState;
 	signal next_state: state := InitialState;
-	signal count: integer range 0 to 32;
+	signal count: integer range 0 to 31;
 begin
 
 	 CS: process(clock, reset) -- current state and asynchronous reset
@@ -75,7 +73,9 @@ begin
 	Nxt: process(clock) -- Next state process. 
 	begin
 		if rising_edge(clock) then
-			if current_state = InitialState or current_state = DoneState then
+			if current_state = DoneState then
+				Next_state <= InitialState;
+			elsif current_state = InitialState then
 			 	if start = '1' then
 					case op is
 						when '0' => -- rotational
@@ -104,7 +104,7 @@ begin
 				else 
 					next_state <= current_state;
 				end if;
-			elsif count = 32 then
+			elsif count = 31 then
 				next_state <= DoneState;
 			else 
 				next_state <= current_state;
@@ -130,7 +130,6 @@ begin
 --binary point is after the second MSB (sign bit, bit, binary point, frac bit, frac bit, frac bit....)
 --'00' is linear, '01' is circular, '10' hyperbolic, '11' is nothing
 	OutP: process(current_state, clock) is -- Output process
-	variable repeat: boolean := true; -- checks if hyperbolic iteration is to be repeated
 	begin
 		if rising_edge(clock) then
 			case current_state is
@@ -147,7 +146,6 @@ begin
 					end if;
 					done <= '0';
 					i <= conv_std_logic_vector (count, 5);
-					count <= count + 1;
 				when VLinear =>
 					m <= "00";
 					done <= '0';
@@ -158,7 +156,6 @@ begin
 					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
-					count <= count + 1;
 				when RCircular => 
 				-- i = 0,1,2...n-1
 					m <= "01";
@@ -170,7 +167,6 @@ begin
 					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
-					count <= count + 1;
 				when VCircular =>
 					m <= "01";
 					done <= '0';
@@ -181,7 +177,6 @@ begin
 					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
-					count <= count + 1;
 				when RHyperbolic => 
 				-- hyperbolic iterations repeat at i = 4, 13 for n = 32. i = 1,2...n-1
 				-- iteration repeats given by i = (3^(j+1)-1)/2 for j = 1,2,3...
@@ -195,18 +190,8 @@ begin
 					done <= '0';
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
-						count <= 2;
-					elsif (count = 4 or count = 13) and repeat = true then
-						i <= conv_std_logic_vector(count, 5);
-						repeat := false;
 					else
-						i <= conv_std_logic_vector(count, 5);
-						count <= count + 1;
-						if count = 4 or count = 13 then
-							repeat := true;
-						else
-							repeat := false;
-						end if;
+						i <= conv_std_logic_vector(count,5);
 					end if;
 					
 				when VHyperbolic =>
@@ -220,34 +205,46 @@ begin
 					done <= '0';
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
-						count <= 2;			
-					if (count = 4 or count = 13) and repeat = true then
-						i <= conv_std_logic_vector(count, 5);
-						repeat := false;
 					else
-						i <= conv_std_logic_vector(count, 5);
-						count <= count + 1;
-						if count = 4 or count = 13 then
-							repeat := true;
-						else
-							repeat := false;
-						end if;
+						i <= conv_std_logic_vector(count,5);
 					end if;
 				when DoneState =>
 				 done <= '1';
 				 Xout <= X;
 				 Yout <= Y;
 				 Zout <= Z;
-				 -- reset counter
-				 count <= 0;
-				 i <= conv_std_logic_vector(count, 5);
 				when InitialState =>
-				 count <= 0;
 				 done <= '0';
 			end case;
 		end if;
 	end process OutP;
-
+	
+	countR: process(clock) is
+	variable repeat: boolean := true; -- checks if hyperbolic iteration is to be repeated
+	begin
+		if rising_edge(clock) then
+			if Current_State = InitialState then
+			 count <= 0;
+			elsif Current_State = VHyperbolic or Current_State = RHyperbolic then
+				if (count = 0) then
+							count <= 2;			
+						if (count = 4 or count = 13) and repeat = true then
+							repeat := false;
+						else
+							count <= count + 1;
+							if count = 4 or count = 13 then
+								repeat := true;
+							else
+								repeat := false;
+							end if; 
+						end if;
+				end if;
+			else
+				count <= count + 1; -- might count forever or rollover
+			end if;
+		end if;
+			
+	end process countR;
 
 end Behavioral;
 

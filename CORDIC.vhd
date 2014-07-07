@@ -44,18 +44,17 @@ end CORDIC;
 architecture Behavioral of CORDIC is
 signal ax,ay,az,rx,ry,rz,theta : STD_LOGIC_VECTOR(31 downto 0);
 signal i : STD_LOGIC_VECTOR(4 downto 0);
-signal enM,enALU,addSub,wr : STD_LOGIC;
+signal addSub : STD_LOGIC;
 signal mOut : STD_LOGIC_VECTOR(1 downto 0);
 begin
-	enM <= '1';
 --instantiate the Controller
-	CONT1 : entity Controller port map(clock,mode,op,start,reset,rx,ry,rz,mOut,enALU,i,done,addSub,x,y,z);
+	CONT1 : entity Controller port map(clock,mode,op,start,reset,rx,ry,rz,mOut,i,done,addSub,x,y,z);
 --instantiate the ALU
-	ALU1 : entity ALU port map(rx,ry,rz,i,theta,reset,enALU,addSub,clock,ax,ay,az,wr);
+	ALU1 : entity ALU port map(rx,ry,rz,i,theta,reset,addSub,ax,ay,az);
 --instantiate the ROM
-	ROM1 : entity ROM port map(clock,mOut,enM,i,theta);
+	ROM1 : entity ROM port map(mOut,i,theta);
 --instantiate the RegisterBank
-	REGBANK1 : entity RegisterBank port map(clock,wr,enM,ax,ay,az,rx,ry,rz);
+	REGBANK1 : entity RegisterBank port map(clock,reset,ax,ay,az,rx,ry,rz);
 
 end Behavioral;
 

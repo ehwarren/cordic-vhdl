@@ -34,10 +34,7 @@ entity ROM is
 	Generic (data_width 	: natural := 32;
 				rom_width 	: natural := 32
 				);
-port(	clock	   : in std_logic;
-		mode		: in std_logic_vector(1 downto 0);	-- 0 is circular or 1 is hyperbolic table
-		en			: in std_logic;	-- enable
---		r			: in std_logic;	-- read. design decision needs to be made about read
+port( mode		: in std_logic_vector(1 downto 0);	-- 0 is circular or 1 is hyperbolic table
 		i			: in STD_LOGIC_VECTOR(4 downto 0); -- iteration number/address
 		theta		: out std_logic_vector(data_width - 1 downto 0)
 );
@@ -80,8 +77,9 @@ type ROM_Array is array (0 to rom_width - 1)
 		28 => "00000000000000000000000000000100", --Delta: 3.725290e-09 Theta: 3.725290e-09 
 		29 => "00000000000000000000000000000010", --Delta: 1.862645e-09 Theta: 1.862645e-09 
 		30 => "00000000000000000000000000000001", --Delta: 9.313226e-10 Theta: 9.313226e-10 
-		31 => "00000000000000000000000000000001", --Delta: 4.656613e-10 Theta: 4.656613e-10 
-    }
+		31 => "00000000000000000000000000000001", --Delta: 4.656613e-10 Theta: 4.656613e-10
+		OTHERS => "00000000000000000000000000000000"
+    );
 
     constant Circular: ROM_Array := (       
 		0 => "00110010010000111111011010101001", --Delta: 1 Theta: 7.853982e-01 
@@ -120,7 +118,7 @@ type ROM_Array is array (0 to rom_width - 1)
 	);   
 
     constant Hyperbolic: ROM_Array := ( --DO NOT FORGET to offset iteration number by 1 in controller
-   		1 => "00100011001001111101010011110101",
+   	1 => "00100011001001111101010011110101",
 		2 => "00010000010110001010111011111011",
 		3 => "00001000000010101100010010001110",
 		4 => "00000100000000010101011000100011",
@@ -151,29 +149,24 @@ type ROM_Array is array (0 to rom_width - 1)
 		29 => "00000000000000000000000000000010",
 		30 => "00000000000000000000000000000001",
 		31 => "00000000000000000000000000000001",
-		32 => "00000000000000000000000000000000",
+		--32 => "00000000000000000000000000000000",
 		OTHERS => "00000000000000000000000000000000"
 	);       
 
 begin
-	process(clock)
+	process(i)
 	begin
-		if (clock = '1' and clock'event) then
-			if en = '1' then
 				--if( r = '1' ) then -- design decision needs to be made about read
 					if mode = "01" then -- circular
 							theta <= Circular(to_integer(unsigned(i)));
-						elsif mode = "10" then -- hyperbolic
+					elsif mode = "10" then -- hyperbolic
 							theta <= Hyperbolic(to_integer(unsigned(i)));
-						else 
-							theta <= "0"; -- 32 bit representation needed
+					elsif mode = "00" then -- linear
+							theta <= Linear(to_integer(unsigned(i)));
+					else
+							theta <= "00000000000000000000000000000000";--garbage value 
 					end if;
 				--else
-			else
-				  theta <= "0"; -- 32 bit representation needed
-				--end if;
-		  	end if;
-		end if;
 	end process;
 end Behavioral;
 
