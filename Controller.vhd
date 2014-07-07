@@ -145,7 +145,6 @@ begin
 					else
 						addSub <= '0';
 					end if;
-					en <= '1';
 					done <= '0';
 					i <= conv_std_logic_vector (count, 5);
 					count <= count + 1;
@@ -157,7 +156,6 @@ begin
 					else
 						addSub <= '0';
 					end if;
-					en <= '1';
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
 					count <= count + 1;
@@ -170,7 +168,6 @@ begin
 					else
 						addSub <= '0';
 					end if;
-					en <= '1';
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
 					count <= count + 1;
@@ -182,7 +179,6 @@ begin
 					else
 						addSub <= '0';
 					end if;
-					en <= '1';
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
 					count <= count + 1;
@@ -196,7 +192,6 @@ begin
 					else
 						addSub <= '0';
 					end if;
-					en <= '1';
 					done <= '0';
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
@@ -222,7 +217,6 @@ begin
 					else
 						addSub <= '0';
 					end if;
-					en <= '1';
 					done <= '0';
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
@@ -241,7 +235,6 @@ begin
 					end if;
 				when DoneState =>
 				 done <= '1';
-				 en <= '0';
 				 Xout <= X;
 				 Yout <= Y;
 				 Zout <= Z;
@@ -251,7 +244,6 @@ begin
 				when InitialState =>
 				 count <= 0;
 				 done <= '0';
-				 en <= '0';
 			end case;
 		end if;
 	end process OutP;
