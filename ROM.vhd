@@ -49,7 +49,7 @@ type ROM_Array is array (0 to rom_width - 1)
 	of std_logic_vector(data_width - 1 downto 0);
 
     constant Linear: ROM_Array := (
-		0 => "001000000000000000000000000000000", --Delta: 1 Theta: 1 
+		0 => "01000000000000000000000000000000", --Delta: 1 Theta: 1 
 		1 => "00100000000000000000000000000000", --Delta: 5.000000e-01 Theta: 5.000000e-01 
 		2 => "00010000000000000000000000000000", --Delta: 2.500000e-01 Theta: 2.500000e-01 
 		3 => "00001000000000000000000000000000", --Delta: 1.250000e-01 Theta: 1.250000e-01 
