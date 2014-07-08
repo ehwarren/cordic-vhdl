@@ -61,9 +61,11 @@ begin
 					Reg(1) <= Y_in;
 					Reg(2) <= Z_in;
 		end if;
-		X_out <= Reg(0);
-		Y_out <= Reg(1);
-		Z_out <= Reg(2); 	
+	 	
+		
 	end process;
+	X_out <= Reg(0);
+	Y_out <= Reg(1);
+	Z_out <= Reg(2); 	
 end Behavioral;
 
