@@ -19,8 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use IEEE.NUMERIC_STD.ALL;
+--use IEEE.STD_LOGIC_UNSIGNED.ALL;
+--use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -49,7 +49,8 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 				 addSub  : out std_logic; 				-- Mode out
 				 Xout	 : out std_logic_vector(31 downto 0); 		-- Final Result
 				 Yout	 : out std_logic_vector(31 downto 0); 		-- ..
-				 Zout	 : out std_logic_vector(31 downto 0) 		-- ..
+				 Zout	 : out std_logic_vector(31 downto 0); 		-- ..
+				 oState  : out std_logic_vector (3 downto 0)
 			  );
 
 end Controller;
@@ -64,7 +65,7 @@ begin
 	 CS: process(clock, reset) -- current state and asynchronous reset
 	 begin
 		if reset = '1' then
-			current_state <= InitialState; -- Reset state failsafe. State to be discussed, VLinear is temp.
+			current_state <= InitialState; -- Reset state failsafe. 
 		elsif rising_edge(clock) then
 			current_state <= next_state; -- manage current state
 		end if;
@@ -74,40 +75,53 @@ begin
 	begin
 		if rising_edge(clock) then
 			if current_state = DoneState then
-				Next_state <= InitialState;
+				next_state <= InitialState;
+				oState <= "0000";
 			elsif current_state = InitialState then
 			 	if start = '1' then
 					case op is
 						when '0' => -- rotational
 							if mode = "00" then
 								next_state <= RLinear;
+								oState <= "0001";
 							elsif mode = "01" then
 								next_state <= RCircular;
+								oState <= "0010";
 							elsif mode = "10" then
 								next_state <= RHyperbolic;
+								oState <= "0011";
 							else 
 								next_state <= current_state;
+								oState <= "1000";
 							end if;
 						when '1' => -- vectoring
 							if mode = "00" then
 								next_state <= VLinear;
+								oState <= "0100";
 							elsif mode = "01" then
 								next_state <= VCircular;
+								oState <= "0101";
 							elsif mode = "10" then
 								next_state <= VHyperbolic;
+								oState <= "0110";
 							else 
 								next_state <= current_state;
+								oState <= "1001";
 							end if;
 						when others => -- others should not occur
 							next_state <= current_state;
+							oState <= "1010";
 					end case;
 				else 
 					next_state <= current_state;
+					oState <= "1011";
 				end if;
 			elsif count = 31 then
 				next_state <= DoneState;
+				oState <= "0111";
 			else 
 				next_state <= current_state;
+
 			end if;
 		end if;
 	end process Nxt;
