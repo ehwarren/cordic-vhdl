@@ -34,7 +34,7 @@ entity ROM is
 	Generic (data_width 	: natural := 32;
 				rom_width 	: natural := 32
 				);
-port( mode		: in std_logic_vector(1 downto 0);	-- 0 is circular or 1 is hyperbolic table
+port( mode		: in std_logic_vector(1 downto 0);	--'00' is linear, '01' is circular, '10' hyperbolic, '11' is nothing
 		i			: in STD_LOGIC_VECTOR(4 downto 0); -- iteration number/address
 		theta		: out std_logic_vector(data_width - 1 downto 0)
 );
