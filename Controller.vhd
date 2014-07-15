@@ -40,13 +40,14 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 				 op	 : in std_logic; -- '0' rotation or '1' vectoring
 				 start : in std_logic; -- start to be included in controller logic.
 				 reset : in std_logic;
-				 X		 : in std_logic_vector(31 downto 0); 	-- FROM ALU 
-				 Y		 : in std_logic_vector(31 downto 0); 	-- FROM ALU
-				 Z		 : in std_logic_vector(31 downto 0);    -- FROM ALU
+				 X		 : in std_logic_vector(31 downto 0); 	-- FROM RegisterBank 
+				 Y		 : in std_logic_vector(31 downto 0); 	-- FROM RegisterBank
+				 Z		 : in std_logic_vector(31 downto 0);    -- FROM RegisterBank
 				 m		 : out std_logic_vector (1 downto 0); 	-- Mode out
 				 i		 : out std_logic_vector (n - 1 downto 0); -- current iteration
 				 done	 : out std_logic;				-- signals that final output is complete
 				 addSub  : out std_logic; 				-- Mode out
+				 en : out std_logic;
 				 Xout	 : out std_logic_vector(31 downto 0); 		-- Final Result
 				 Yout	 : out std_logic_vector(31 downto 0); 		-- ..
 				 Zout	 : out std_logic_vector(31 downto 0); 		-- ..
@@ -79,6 +80,7 @@ begin
 				oState <= "0000";
 			elsif current_state = InitialState then
 			 	if start = '1' then
+					m <= mode;
 					case op is
 						when '0' => -- rotational
 							if mode = "00" then
@@ -116,7 +118,7 @@ begin
 					next_state <= current_state;
 					oState <= "1011";
 				end if;
-			elsif count = 31 then
+			elsif count = 30 then
 				next_state <= DoneState;
 				oState <= "0111";
 			else 
@@ -149,58 +151,63 @@ begin
 			case current_state is
 				when RLinear => 
 				-- i = 0,1,2...n-1. n, for this project, is 32
-					m <= "00"; -- output mode
+				--	m <= "00"; -- output mode
+					en <= '1'; -- enable regbank
 					--read register
 					--calculate addSub + output addSub
 					--output en as 1
-					if signed(Z) > 0 then
-						addSub <= '1';
-					else
-						addSub <= '0';
-					end if;
+--					if signed(Z) > 0 then
+--						addSub <= '1';
+--					else
+--						addSub <= '0';
+--					end if;
 					done <= '0';
 					i <= conv_std_logic_vector (count, 5);
 				when VLinear =>
-					m <= "00";
+				--	m <= "00";
+					en <= '1'; -- enable regbank
 					done <= '0';
-					if signed(Y) > 0 then
-						addSub <= '1';
-					else
-						addSub <= '0';
-					end if;
+--					if signed(Y) > 0 then
+--						addSub <= '1';
+--					else
+--						addSub <= '0';
+--					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
 				when RCircular => 
 				-- i = 0,1,2...n-1
-					m <= "01";
+				--	m <= "01";
+					en <= '1'; -- enable regbank
 					done <= '0';
-					if signed(Z) > 0 then
-						addSub <= '1';
-					else
-						addSub <= '0';
-					end if;
+--					if signed(Z) > 0 then
+--						addSub <= '1';
+--					else
+--						addSub <= '0';
+--					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
 				when VCircular =>
-					m <= "01";
+				--	m <= "01";
+					en <= '1'; -- enable regbank
 					done <= '0';
-					if signed(Y) > 0 then
-						addSub <= '1';
-					else
-						addSub <= '0';
-					end if;
+--					if signed(Y) > 0 then
+--						addSub <= '1';
+--					else
+--						addSub <= '0';
+--					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
 				when RHyperbolic => 
 				-- hyperbolic iterations repeat at i = 4, 13 for n = 32. i = 1,2...n-1
 				-- iteration repeats given by i = (3^(j+1)-1)/2 for j = 1,2,3...
-					m <= "10";
+				--	m <= "10";
+					en <= '1'; -- enable regbank
 					done <= '0';					
-					if signed(Z) > 0 then
-						addSub <= '1';
-					else
-						addSub <= '0';
-					end if;
+--					if signed(Z) > 0 then
+--						addSub <= '1';
+--					else
+--						addSub <= '0';
+--					end if;
 					done <= '0';
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
@@ -209,13 +216,14 @@ begin
 					end if;
 					
 				when VHyperbolic =>
-					m <= "10";
+				--	m <= "10";
+					en <= '1'; -- enable regbank
 					done <= '0';
-					if signed(Y) > 0 then
-						addSub <= '1';
-					else
-						addSub <= '0';
-					end if;
+--					if signed(Y) > 0 then
+--						addSub <= '1';
+--					else
+--						addSub <= '0';
+--					end if;
 					done <= '0';
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
@@ -224,14 +232,30 @@ begin
 					end if;
 				when DoneState =>
 				 done <= '1';
-				 Xout <= X;
-				 Yout <= Y;
-				 Zout <= Z;
+				 en <= '0'; -- deenable regbank
+				 --Xout <= X;
+				 --Yout <= Y;
+				-- Zout <= Z;
 				when InitialState =>
 				 done <= '0';
+				 en <= '0'; -- deenable regbank
 			end case;
 		end if;
 	end process OutP;
+	
+	Xout <= X;
+	Yout <= Y;
+	Zout <= Z;
+	
+	addSubUpdate: process(Z) is
+	begin
+		if signed(Z) > 0 then
+			addSub <= '1';
+		else
+			addSub <= '0';
+		end if;
+
+	end process;
 	
 	countR: process(clock) is
 	variable repeat: boolean := true; -- checks if hyperbolic iteration is to be repeated

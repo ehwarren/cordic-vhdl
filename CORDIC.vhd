@@ -19,7 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use work.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -38,23 +38,33 @@ entity CORDIC is
            x : out  STD_LOGIC_VECTOR(31 downto 0);
            y : out  STD_LOGIC_VECTOR(31 downto 0);
            z : out  STD_LOGIC_VECTOR(31 downto 0);
-           done : out  STD_LOGIC);
+           done : out  STD_LOGIC;
+			  iOut : out  STD_LOGIC_VECTOR(4 downto 0);
+			  addSubOut : out STD_LOGIC;
+			  oStateOut : out STD_LOGIC_VECTOR(3 downto 0)
+			  );
 end CORDIC;
 
 architecture Behavioral of CORDIC is
-signal ax,ay,az,rx,ry,rz,theta : STD_LOGIC_VECTOR(31 downto 0);
+signal ax,ay,az,rx,ry,rz,gx,gy,gz,theta : STD_LOGIC_VECTOR(31 downto 0);
 signal i : STD_LOGIC_VECTOR(4 downto 0);
-signal addSub : STD_LOGIC;
+signal addSub,en : STD_LOGIC;
 signal mOut : STD_LOGIC_VECTOR(1 downto 0);
+signal oState : STD_LOGIC_VECTOR(3 downto 0);
 begin
 --instantiate the Controller
-	CONT1 : entity Controller port map(clock,mode,op,start,reset,rx,ry,rz,mOut,i,done,addSub,x,y,z);
+	CONT1 : entity Controller port map(clock,mode,op,start,reset,rx,ry,rz,mOut,i,done,addSub,en,gx,gy,gz,oState);
 --instantiate the ALU
-	ALU1 : entity ALU port map(rx,ry,rz,i,theta,reset,addSub,ax,ay,az);
+	ALU1 : entity ALU port map(rx,ry,rz,i,theta,mOut,addSub,ax,ay,az);
 --instantiate the ROM
 	ROM1 : entity ROM port map(mOut,i,theta);
 --instantiate the RegisterBank
-	REGBANK1 : entity RegisterBank port map(clock,reset,ax,ay,az,rx,ry,rz);
-
+	REGBANK1 : entity RegisterBank port map(clock,reset,en,ax,ay,az,rx,ry,rz);
+	iOut <= i;
+	addSubOut <= addSub;
+	oStateOut <= oState;
+	x <= rx;
+	y <= ry;
+	z <= rz;
 end Behavioral;
 

@@ -40,7 +40,7 @@ port(	inX : IN  std_logic_vector(31 downto 0);
 		inZ : IN  std_logic_vector(31 downto 0);
 		i: IN std_logic_vector(4 downto 0); -- iteration number
 		theta : in std_logic_vector(31 downto 0);
-		reset: in std_logic; -- may not be needed
+		m: in std_logic_vector(1 downto 0);
 		addSub:	in std_logic; -- add or subtract addSub. addSub '0' x and z are addition, y is subtraction. addSub '1' is vice versa
       result_X : OUT  std_logic_vector(31 downto 0);
       result_Y : OUT  std_logic_vector(31 downto 0);
@@ -53,36 +53,53 @@ architecture behv of ALU is
 begin			
 		   
 	 
-    pX : process(i,inX,inY) is
+    pX : process(theta) is
 	 variable signed_X,signed_Y: signed(31 downto 0);
 	 variable iteration :integer;
     begin
     
 	-- use case statement to achieve 
 	-- different operations of ALU
-			signed_X := signed(inX);
-			signed_Y := signed(inY);
-			iteration := to_integer(unsigned(i)); 
-				case addSub is
-					 when '0' =>
-						result_X <= std_logic_vector(signed_X + shift_right(signed_Y,iteration)); -- Addition of Input 1 and Input 2
-					 when '1' =>						
-						result_X <= std_logic_vector(signed_X - shift_right(signed_Y,iteration)); -- 2's compliment subtraction of Input 1 and Input 2
-					 when others =>	 
-						result_X <= x"00000000"; -- nop
-					  end case;
-    end process pX;
+		signed_X := signed(inX);
+		signed_Y := signed(inY);
+		iteration := to_integer(unsigned(i)); 
+		if m = "00" then
+			result_X <= "00000000000000000000000000000000";
+		elsif m = "01" then
+			case addSub is
+			when '0' =>
+				result_X <= std_logic_vector(signed_X + shift_right(signed_Y,iteration)); -- Addition of Input 1 and Input 2
+			when '1' =>						
+				result_X <= std_logic_vector(signed_X - shift_right(signed_Y,iteration)); -- 2's compliment subtraction of Input 1 and Input 2
+			when others =>	 
+				result_X <= x"00000000"; -- nop
+			end case;
+		elsif m = "10" then
+			case addSub is
+			when '1' =>
+				result_X <= std_logic_vector(signed_X + shift_right(signed_Y,iteration)); -- Addition of Input 1 and Input 2
+			when '0' =>						
+				result_X <= std_logic_vector(signed_X - shift_right(signed_Y,iteration)); -- 2's compliment subtraction of Input 1 and Input 2
+			when others =>	 
+				result_X <= x"00000000"; -- nop
+			end case;
+		else
+			result_X <= inX;
+		end if;
+
+		
+--    end process pX;
 	 
-	 pY : process(i,inX,inY) is
-	 variable signed_X,signed_Y: signed(31 downto 0);
-	 variable iteration :integer;
-    begin
+--	 pY : process(theta) is
+--	 variable signed_X,signed_Y: signed(31 downto 0);
+--	 variable iteration :integer;
+--    begin
     
 	-- use case statement to achieve 
 	-- different operations of ALU
-			signed_X := signed(inX);
-			signed_Y := signed(inY);
-			iteration := to_integer(unsigned(i)); 
+--			signed_X := signed(inX);
+--			signed_Y := signed(inY);
+--			iteration := to_integer(unsigned(i)); 
 				case addSub is
 					 when '1' =>
 						result_Y <= std_logic_vector(signed_Y + shift_right(signed_X,iteration)); -- Addition of Input 1 and Input 2
@@ -91,17 +108,14 @@ begin
 					 when others =>	 
 						result_Y <= x"00000000"; -- nop
 					  end case;
-    end process pY;
+    end process pX;
 
-    pZ : process(theta,inZ) is
+    pZ : process(theta, addSub) is
 	 variable signed_Z: signed(31 downto 0);
-	 variable iteration :integer;
     begin
-    
 	-- use case statement to achieve 
 	-- different operations of ALU
 			signed_Z := signed(inZ);
-			iteration := to_integer(unsigned(i)); 
 				case addSub is
 					 when '0' =>
 						result_Z <= std_logic_vector(signed_Z + signed(theta)) ; -- Addition of Input 1 and Input 2

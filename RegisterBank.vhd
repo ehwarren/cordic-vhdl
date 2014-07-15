@@ -35,6 +35,7 @@ entity RegisterBank is
 				);
     Port ( clock : in std_logic;
 			  reset : in std_logic;
+			  en	: in std_logic;
 			  X_in 	: in  std_logic_vector(DataSize - 1 downto 0);
            Y_in : in  std_logic_vector(DataSize - 1 downto 0);
            Z_in : in  std_logic_vector(DataSize - 1 downto 0);
@@ -53,10 +54,10 @@ begin
 	process(clock,reset)--do reset stuff
 	begin
 		if reset = '1' then
-					Reg(0) <= "00000000000000000000000000000001"; -- SCALE FACTOR MAYBE?
-					Reg(1) <= "00000000000000000000000000000000";
-					Reg(2) <= "00110010010000111111011010101001"; --Delta: 1 Theta: 7.853982e-01 
-		elsif rising_edge(clock) then	
+					Reg(0) <= x"26dd3b6a"; -- SCALE FACTOR MAYBE?
+					Reg(1) <= x"00000000";
+					Reg(2) <= x"2182a470"; --Delta: 1 Theta: 7.853982e-01
+		elsif rising_edge(clock) and en = '1' then	
 					Reg(0) <= X_in;
 					Reg(1) <= Y_in;
 					Reg(2) <= Z_in;
