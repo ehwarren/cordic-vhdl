@@ -53,9 +53,10 @@ architecture behv of ALU is
 begin			
 		   
 	 
-    pX : process(theta) is
+    pX : process(theta, addSub) is
 	 variable signed_X,signed_Y: signed(31 downto 0);
 	 variable iteration :integer;
+	 variable signed_Z: signed(31 downto 0);
     begin
     
 	-- use case statement to achieve 
@@ -108,11 +109,11 @@ begin
 					 when others =>	 
 						result_Y <= x"00000000"; -- nop
 					  end case;
-    end process pX;
+    --end process pX;
 
-    pZ : process(theta, addSub) is
-	 variable signed_Z: signed(31 downto 0);
-    begin
+   -- pZ : process(theta, addSub) is
+	 --variable signed_Z: signed(31 downto 0);
+  --  begin
 	-- use case statement to achieve 
 	-- different operations of ALU
 			signed_Z := signed(inZ);
@@ -124,7 +125,7 @@ begin
 					 when others =>	 
 						result_Z <= x"00000000"; -- nop
 					  end case;
-    end process pZ;
+    end process pX;
 
 
 end behv;
