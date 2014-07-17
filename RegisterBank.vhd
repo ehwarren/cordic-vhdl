@@ -54,9 +54,9 @@ begin
 	process(clock,reset)--do reset stuff
 	begin
 		if reset = '1' then
-					Reg(0) <= x"26dd3b6a"; -- SCALE FACTOR MAYBE?
+					Reg(0) <= x"26DD3B6A"; -- SCALE FACTOR MAYBE?
 					Reg(1) <= x"00000000";
-					Reg(2) <= x"2182a470"; --Delta: 1 Theta: 7.853982e-01
+					Reg(2) <= x"2182A470"; --Delta: 1 Theta: 7.853982e-01
 		elsif rising_edge(clock) and en = '1' then	
 					Reg(0) <= X_in;
 					Reg(1) <= Y_in;

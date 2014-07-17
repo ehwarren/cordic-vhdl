@@ -53,7 +53,7 @@ architecture behv of ALU is
 begin			
 		   
 	 
-    pX : process(theta, addSub) is
+    pX : process(i,inX,inY,inZ,theta, addSub) is
 	 variable signed_X,signed_Y: signed(31 downto 0);
 	 variable iteration :integer;
 	 variable signed_Z: signed(31 downto 0);
@@ -65,7 +65,7 @@ begin
 		signed_Y := signed(inY);
 		iteration := to_integer(unsigned(i)); 
 		if m = "00" then
-			result_X <= "00000000000000000000000000000000";
+			result_X <= inX;
 		elsif m = "01" then
 			case addSub is
 			when '0' =>

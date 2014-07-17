@@ -57,7 +57,7 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 end Controller;
 
 architecture Behavioral of Controller is
-	type state is (InitialState, VLinear, RLinear, VCircular, RCircular, VHyperbolic, RHyperbolic, DoneState);
+	type state is (InitialState, Linear, Circular, Hyperbolic, DoneState);
 	signal current_state: state := InitialState;
 	signal next_state: state := InitialState;
 	signal count: integer range 0 to 31;
@@ -81,39 +81,19 @@ begin
 			elsif current_state = InitialState then
 			 	if start = '1' then
 					m <= mode;
-					case op is
-						when '0' => -- rotational
 							if mode = "00" then
-								next_state <= RLinear;
+								next_state <= Linear;
 								oState <= "0001";
 							elsif mode = "01" then
-								next_state <= RCircular;
+								next_state <= Circular;
 								oState <= "0010";
 							elsif mode = "10" then
-								next_state <= RHyperbolic;
+								next_state <= Hyperbolic;
 								oState <= "0011";
 							else 
 								next_state <= current_state;
 								oState <= "1000";
 							end if;
-						when '1' => -- vectoring
-							if mode = "00" then
-								next_state <= VLinear;
-								oState <= "0100";
-							elsif mode = "01" then
-								next_state <= VCircular;
-								oState <= "0101";
-							elsif mode = "10" then
-								next_state <= VHyperbolic;
-								oState <= "0110";
-							else 
-								next_state <= current_state;
-								oState <= "1001";
-							end if;
-						when others => -- others should not occur
-							next_state <= current_state;
-							oState <= "1010";
-					end case;
 				else 
 					next_state <= current_state;
 					oState <= "1011";
@@ -149,87 +129,35 @@ begin
 	begin
 		if rising_edge(clock) then
 			case current_state is
-				when RLinear => 
+				when Linear => 
 				-- i = 0,1,2...n-1. n, for this project, is 32
 				--	m <= "00"; -- output mode
 					en <= '1'; -- enable regbank
 					--read register
 					--calculate addSub + output addSub
 					--output en as 1
---					if signed(Z) > 0 then
---						addSub <= '1';
---					else
---						addSub <= '0';
---					end if;
 					done <= '0';
 					i <= conv_std_logic_vector (count, 5);
-				when VLinear =>
-				--	m <= "00";
-					en <= '1'; -- enable regbank
-					done <= '0';
---					if signed(Y) > 0 then
---						addSub <= '1';
---					else
---						addSub <= '0';
---					end if;
-					done <= '0';					
-					i <= conv_std_logic_vector(count, 5);
-				when RCircular => 
+				when Circular => 
 				-- i = 0,1,2...n-1
 				--	m <= "01";
 					en <= '1'; -- enable regbank
-					done <= '0';
---					if signed(Z) > 0 then
---						addSub <= '1';
---					else
---						addSub <= '0';
---					end if;
 					done <= '0';					
 					i <= conv_std_logic_vector(count, 5);
-				when VCircular =>
-				--	m <= "01";
-					en <= '1'; -- enable regbank
-					done <= '0';
---					if signed(Y) > 0 then
---						addSub <= '1';
---					else
---						addSub <= '0';
---					end if;
-					done <= '0';					
-					i <= conv_std_logic_vector(count, 5);
-				when RHyperbolic => 
+
+				when Hyperbolic => 
 				-- hyperbolic iterations repeat at i = 4, 13 for n = 32. i = 1,2...n-1
 				-- iteration repeats given by i = (3^(j+1)-1)/2 for j = 1,2,3...
 				--	m <= "10";
 					en <= '1'; -- enable regbank
 					done <= '0';					
---					if signed(Z) > 0 then
---						addSub <= '1';
---					else
---						addSub <= '0';
---					end if;
-					done <= '0';
+
 					if (count = 0) then
 						i <= conv_std_logic_vector(1,5);
 					else
 						i <= conv_std_logic_vector(count,5);
 					end if;
 					
-				when VHyperbolic =>
-				--	m <= "10";
-					en <= '1'; -- enable regbank
-					done <= '0';
---					if signed(Y) > 0 then
---						addSub <= '1';
---					else
---						addSub <= '0';
---					end if;
-					done <= '0';
-					if (count = 0) then
-						i <= conv_std_logic_vector(1,5);
-					else
-						i <= conv_std_logic_vector(count,5);
-					end if;
 				when DoneState =>
 				 done <= '1';
 				 en <= '0'; -- deenable regbank
@@ -249,33 +177,44 @@ begin
 	
 	addSubUpdate: process(Z) is
 	begin
-		if signed(Z) > 0 then
-			addSub <= '1';
-		else
-			addSub <= '0';
-		end if;
+		case op is
+			when '0' =>
+				if signed(Z) > 0 then
+					addSub <= '1';
+				else
+					addSub <= '0';
+				end if;
+			when '1' =>
+				if signed(Y) > 0 then
+					addSub <= '0';
+				else
+					addSub <= '1';
+				end if;
+			when others =>
+				addSub <= '1';
+		end case;
+			
 
 	end process;
 	
 	countR: process(clock) is
-	variable repeat: boolean := true; -- checks if hyperbolic iteration is to be repeated
+	variable repeat: boolean := false; -- checks if hyperbolic iteration is to be repeated
 	begin
 		if rising_edge(clock) then
 			if Current_State = InitialState then
 			 count <= 0;
-			elsif Current_State = VHyperbolic or Current_State = RHyperbolic then
+			elsif Current_State = Hyperbolic then
 				if (count = 0) then
-							count <= 2;			
-						if (count = 4 or count = 13) and repeat = true then
+							count <= 2;
+				elsif ((count = 4 or count = 13) and repeat = true) then
 							repeat := false;
-						else
+				else
 							count <= count + 1;
-							if count = 4 or count = 13 then
+							if count = 3 or count = 12 then
 								repeat := true;
 							else
 								repeat := false;
 							end if; 
-						end if;
 				end if;
 			else
 				count <= count + 1; -- might count forever or rollover
