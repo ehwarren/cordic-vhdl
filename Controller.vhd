@@ -57,7 +57,7 @@ Generic (n 	: positive := 5 -- 2^5 = 32
 end Controller;
 
 architecture Behavioral of Controller is
-	type state is (InitialState, Linear, Circular, Hyperbolic, DoneState);
+	type state is (InitialState, Linear, Circular, Hyperbolic, DoneState, EndState);
 	signal current_state: state := InitialState;
 	signal next_state: state := InitialState;
 	signal count: integer range 0 to 31;
@@ -72,11 +72,13 @@ begin
 		end if;
 	end process CS;
 
-	Nxt: process(clock) -- Next state process. 
+	Nxt: process(clock, reset) -- Next state process. 
 	begin
-		if rising_edge(clock) then
-			if current_state = DoneState then
-				next_state <= InitialState;
+		if reset = '1' then
+			next_state <= InitialState;
+		elsif rising_edge(clock) then
+			if current_state = DoneState or current_state = EndState then
+				next_state <= EndState;
 				oState <= "0000";
 			elsif current_state = InitialState then
 			 	if start = '1' then
@@ -161,9 +163,9 @@ begin
 				when DoneState =>
 				 done <= '1';
 				 en <= '0'; -- deenable regbank
-				 --Xout <= X;
-				 --Yout <= Y;
-				-- Zout <= Z;
+				when EndState =>
+					done <= '0';
+					en <= '0';
 				when InitialState =>
 				 done <= '0';
 				 en <= '0'; -- deenable regbank
