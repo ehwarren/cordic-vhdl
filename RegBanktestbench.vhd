@@ -44,6 +44,9 @@ ARCHITECTURE behavior OF RegBanktestbench IS
     PORT(
          clock : IN  std_logic;
          reset : IN  std_logic;
+         en    : IN  std_logic;
+         m     : IN  std_logic_vector(1 downto 0);
+         op    : IN  std_logic;
          X_in : IN  std_logic_vector(31 downto 0);
          Y_in : IN  std_logic_vector(31 downto 0);
          Z_in : IN  std_logic_vector(31 downto 0);
@@ -57,6 +60,9 @@ ARCHITECTURE behavior OF RegBanktestbench IS
    --Inputs
    signal clock : std_logic := '0';
    signal reset : std_logic := '0';
+   signal en    : std_logic := '0';
+   signal m     : std_logic_vector(1 downto 0) := (others => '0');
+   signal op    : std_logic := '0';
    signal X_in : std_logic_vector(31 downto 0) := (others => '0');
    signal Y_in : std_logic_vector(31 downto 0) := (others => '0');
    signal Z_in : std_logic_vector(31 downto 0) := (others => '0');
@@ -75,6 +81,9 @@ BEGIN
    uut: RegisterBank PORT MAP (
           clock => clock,
           reset => reset,
+          en => en,
+          m => m,
+          op => op,
           X_in => X_in,
           Y_in => Y_in,
           Z_in => Z_in,
@@ -99,25 +108,43 @@ BEGIN
       -- hold reset state for 100 ns.
       wait for 100 ns;	
 
-      wait for clock_period*10.5;
+      wait for clock_period*10;
 
-      -- insert stimulus here 
+      -- insert stimulus here
+      		en <= '1';
+      		
+      		m <= "00";
+      		op <= '0';
+      		wait for 2*clock_period;
+      		
+      		m <= "00";
+      		op <= '1';
+      		wait for 2*clock_period;
+      		
+      		m <= "01";
+      		op <= '0';
+      		wait for 2*clock_period;
+      		
+      		m <= "01";
+      		op <= '1';
+      		wait for 2*clock_period;
+      		
+      		m <= "10";
+      		op <= '0';
+      		wait for 2*clock_period;
+      		
+      		m <= "10";
+      		op <= '1';
+      		wait for 2*clock_period;
+      		
+      		m <= "11";
+      		op <= '0';
+      		wait for 2*clock_period;
+      		
 		X_in <= "11111111111111110000000000000000";
 		Y_in <= "11111111000000001111111100000000";
 		Z_in <= "10101010101010101010101010101010";
 		--wait for clock_period*2;
-		assert X_out = "11111111111111110000000000000000";
-					report "X: Expected" & integer'image(to_integer(signed(X_in))) & " got " 
-								& integer'image(to_integer(signed(X_out)))
-			severity warning;
-		assert Y_out = "11111111000000001111111100000000";
-					report "Y: Expected" & integer'image(to_integer(signed(Y_in))) & " got " 
-								& integer'image(to_integer(signed(Y_out)))
-			severity warning;
-		assert Z_out = "10101010101010101010101010101010";
-					report "Z: Expected" & integer'image(to_integer(signed(Z_in))) & " got " 
-								& integer'image(to_integer(signed(Z_out)))
-			severity warning;
       wait;
    end process;
 
