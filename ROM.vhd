@@ -36,7 +36,7 @@ entity ROM is
 				);
 port( mode		: in std_logic_vector(1 downto 0);	--'00' is linear, '01' is circular, '10' hyperbolic, '11' is nothing
 		i			: in STD_LOGIC_VECTOR(4 downto 0); -- iteration number/address
-		theta		: out std_logic_vector(data_width - 1 downto 0)
+		theta		: out std_logic_vector(data_width - 1 downto 0) -- theta output value
 );
 end ROM;
 
@@ -117,7 +117,7 @@ type ROM_Array is array (0 to rom_width - 1)
   	OTHERS => "00000000000000000000000000000000"
 	);   
 
-    constant Hyperbolic: ROM_Array := ( --DO NOT FORGET to offset iteration number by 1 in controller
+    constant Hyperbolic: ROM_Array := (
    	1 => "00100011001001111101010011110101",
 		2 => "00010000010110001010111011111011",
 		3 => "00001000000010101100010010001110",
@@ -149,14 +149,12 @@ type ROM_Array is array (0 to rom_width - 1)
 		29 => "00000000000000000000000000000010",
 		30 => "00000000000000000000000000000001",
 		31 => "00000000000000000000000000000001",
-		--32 => "00000000000000000000000000000000",
 		OTHERS => "00000000000000000000000000000000"
 	);       
 
 begin
 	process(i)
 	begin
-				--if( r = '1' ) then -- design decision needs to be made about read
 					if mode = "01" then -- circular
 							theta <= Circular(to_integer(unsigned(i)));
 					elsif mode = "10" then -- hyperbolic
@@ -164,9 +162,8 @@ begin
 					elsif mode = "00" then -- linear
 							theta <= Linear(to_integer(unsigned(i)));
 					else
-							theta <= "00000000000000000000000000000000";--garbage value 
+							theta <= "00000000000000000000000000000000";-- error value 
 					end if;
-				--else
 	end process;
 end Behavioral;
 
