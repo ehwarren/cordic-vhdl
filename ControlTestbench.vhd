@@ -53,6 +53,7 @@ ARCHITECTURE behavior OF ControlTestbench IS
          i : OUT  std_logic_vector(4 downto 0);
          done : OUT  std_logic;
          addSub : OUT  std_logic;
+			en : out std_logic; -- enable for register bank, ensures values are only written for the operation sequence
          Xout : OUT  std_logic_vector(31 downto 0);
          Yout : OUT  std_logic_vector(31 downto 0);
          Zout : OUT  std_logic_vector(31 downto 0);
@@ -76,6 +77,7 @@ ARCHITECTURE behavior OF ControlTestbench IS
    signal i : std_logic_vector(4 downto 0);
    signal done : std_logic;
    signal addSub : std_logic;
+	signal en : std_logic;
    signal Xout : std_logic_vector(31 downto 0);
    signal Yout : std_logic_vector(31 downto 0);
    signal Zout : std_logic_vector(31 downto 0);
@@ -97,6 +99,7 @@ BEGIN
           Y => Y,
           Z => Z,
           m => m,
+			 en => en,
           i => i,
           done => done,
           addSub => addSub,
@@ -136,7 +139,10 @@ BEGIN
 		start <= '0';
 		op <= '1';
 		wait for clock_period*30;
+		reset <= '1';
 		start <= '1';
+		wait for clock_period*2;
+		reset <= '0';
       wait;
    end process;
 
