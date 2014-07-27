@@ -1,4 +1,4 @@
-
+# old top module - NO LONGER VALID.
 # PlanAhead Generated physical constraints 
 NET "clock" LOC = B8;
 NET "mode[0]" LOC = K17;
