@@ -53,58 +53,55 @@ architecture Behavioral of RegisterBank is
 	signal Reg: Reg_Array;
 begin
 
-	process(clock,reset)--do reset stuff
+	process(clock,reset)
 	begin
-		if reset = '1' then
-		 case m is
+		if reset = '1' then 
+		 case m is -- case statement to determine starting values for each individual mode and op.
 			when "01" =>
-				if op = '0' then
+				if op = '0' then -- rotational circular
 					Reg(0) <= x"26DD3B6A"; 
 					Reg(1) <= x"00000000";
 					Reg(2) <= x"2182A470"; 
-				else 
+				else -- vectoring circular
 					Reg(0) <= x"26DD3B6A"; 
 					Reg(1) <= x"26DD3B6A";
 					Reg(2) <= x"3243F6A9"; 				
 				end if;
 			when "00" =>
-				if op = '0' then
+				if op = '0' then -- rotational linear
 					Reg(0) <= x"0CCCCCCD"; 
 					Reg(1) <= x"051EB852";
 					Reg(2) <= x"60000000"; 				
-				else 
+				else  -- vectoring linear
 					Reg(0) <= x"0CCCCCCD"; 
 					Reg(1) <= x"051EB852";
 					Reg(2) <= x"40000000"; 
 				end if;
 			when "10" =>
-				if op = '0' then
+				if op = '0' then -- rotational hyperbolic
 					Reg(0) <= x"07BA5CFA"; 
 					Reg(1) <= x"0F74B9F5";
 					Reg(2) <= x"40000000"; 				
-				else 
+				else -- vectoring hyperbolic
 					Reg(0) <= x"3DD2E7D3"; 
 					Reg(1) <= x"172F16EF";
 					Reg(2) <= x"00000000"; 				
 				end if;
-			when others =>
-					Reg(0) <= x"00000000"; -- SCALE FACTOR MAYBE?
+			when others => -- error state values. Occurs when mode is set to "11"
+					Reg(0) <= x"00000000"; 
 					Reg(1) <= x"00000000";
-					Reg(2) <= x"00000000"; --Delta: 1 Theta: 7.853982e-01
+					Reg(2) <= x"00000000";
 		 end case;
 		elsif rising_edge(clock) and en = '1' then	
-					Reg(0) <= X_in;
-					Reg(1) <= Y_in;
+					Reg(0) <= X_in; -- register bank updates only on a rising edge clock cycle.
+					Reg(1) <= Y_in; -- this ensures correct values are loaded for each clock cycle
 					Reg(2) <= Z_in;
-		--			Reg(0) <= Reg(0); 
-		--			Reg(1) <= Reg(1);
-		--			Reg(2) <= Reg(2); 
 		
 		end if;
 	 	
 		
 	end process;
-	X_out <= Reg(0);
+	X_out <= Reg(0); -- register bank always outputs the register values
 	Y_out <= Reg(1);
 	Z_out <= Reg(2); 	
 end Behavioral;
