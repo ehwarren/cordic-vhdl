@@ -49,10 +49,7 @@ ARCHITECTURE behavior OF cordic_test IS
          x : OUT  std_logic_vector(31 downto 0);
          y : OUT  std_logic_vector(31 downto 0);
          z : OUT  std_logic_vector(31 downto 0);
-         done : OUT  std_logic;
-			iOut : OUT  std_logic_vector(4 downto 0);
-			addSubOut : out STD_LOGIC;
-			oStateOut : out std_logic_vector(3 downto 0)
+         done : OUT  std_logic
         );
     END COMPONENT;
     
@@ -68,10 +65,7 @@ ARCHITECTURE behavior OF cordic_test IS
    signal x : std_logic_vector(31 downto 0);
    signal y : std_logic_vector(31 downto 0);
    signal z : std_logic_vector(31 downto 0);
-	signal iOut : std_logic_vector(4 downto 0);
    signal done : std_logic;
-	signal addSubOut : STD_LOGIC;
-	signal oStateOut : std_logic_vector(3 downto 0);
    -- Clock period definitions
    constant clock_period : time := 10 ns;
  
@@ -87,10 +81,7 @@ BEGIN
           x => x,
           y => y,
           z => z,
-          done => done,
-			 iOut => iOut,
-			 addSubOut => addSubOut,
-			 oStateOut => oStateOut
+          done => done
         );
 
    -- Clock process definitions
@@ -121,6 +112,69 @@ BEGIN
 		start <= '1';
 		wait for clock_period*3;
 		start <= '0';
+		
+		wait for clock_period*35;
+		
+		mode <= "00";
+		op <= '0';
+		reset <= '1';
+		wait for clock_period*3;
+		reset <= '0';
+		wait for clock_period*3;
+		start <= '1';
+		wait for clock_period*3;
+		start <= '0';
+		
+		wait for clock_period*35;
+		
+		mode <= "10";
+		op <= '0';
+		reset <= '1';
+		wait for clock_period*3;
+		reset <= '0';
+		wait for clock_period*3;
+		start <= '1';
+		wait for clock_period*3;
+		start <= '0';
+		
+		wait for clock_period*35;
+		
+		mode <= "01";
+		op <= '1';
+		reset <= '1';
+		wait for clock_period*3;
+		reset <= '0';
+		wait for clock_period*3;
+		start <= '1';
+		wait for clock_period*3;
+		start <= '0';
+		
+		wait for clock_period*35;
+		
+		mode <= "00";
+		op <= '1';
+		reset <= '1';
+		wait for clock_period*3;
+		reset <= '0';
+		wait for clock_period*3;
+		start <= '1';
+		wait for clock_period*3;
+		start <= '0';
+		
+		wait for clock_period*35;
+		
+		mode <= "10";
+		op <= '1';
+		reset <= '1';
+		wait for clock_period*3;
+		reset <= '0';
+		wait for clock_period*3;
+		start <= '1';
+		wait for clock_period*3;
+		start <= '0';
+		
+		wait for clock_period*35;
+			
       wait;
    end process;
 
