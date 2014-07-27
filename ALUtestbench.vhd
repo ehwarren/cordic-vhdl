@@ -47,10 +47,8 @@ ARCHITECTURE behavior OF ALUTestbench IS
          inZ : IN  std_logic_vector(31 downto 0);
          i : IN  std_logic_vector(4 downto 0);
          theta : IN  std_logic_vector(31 downto 0);
-         reset : IN  std_logic;
-         en : IN  std_logic;
+			m: in std_logic_vector(1 downto 0); -- current mode 
          addSub : IN  std_logic;
-         clock : IN  std_logic;
          result_X : OUT  std_logic_vector(31 downto 0);
          result_Y : OUT  std_logic_vector(31 downto 0);
          result_Z : OUT  std_logic_vector(31 downto 0)
@@ -63,10 +61,8 @@ ARCHITECTURE behavior OF ALUTestbench IS
    signal inZ : std_logic_vector(31 downto 0) := (others => '0');
    signal i : std_logic_vector(4 downto 0) := (others => '0');
    signal theta : std_logic_vector(31 downto 0) := (others => '0');
-   signal reset : std_logic := '0';
-   signal en : std_logic := '0';
+	signal m : std_logic_vector(1 downto 0) := (others => '0');
    signal addSub : std_logic := '0';
-   signal clock : std_logic := '0';
 
  	--Outputs
    signal result_X : std_logic_vector(31 downto 0);
@@ -74,6 +70,7 @@ ARCHITECTURE behavior OF ALUTestbench IS
    signal result_Z : std_logic_vector(31 downto 0);
 
    -- Clock period definitions
+	signal clock : std_logic := '0';
    constant clock_period : time := 10 ns;
  
 BEGIN
@@ -85,10 +82,8 @@ BEGIN
           inZ => inZ,
           i => i,
           theta => theta,
-          reset => reset,
-          en => en,
+			 m => m,
           addSub => addSub,
-          clock => clock,
           result_X => result_X,
           result_Y => result_Y,
           result_Z => result_Z
@@ -115,36 +110,84 @@ BEGIN
 		A := 1;
 		B := 4;
       -- insert stimulus here 
-		en <= '1';
 		i <= "00001";
+		m <= "00";
 		addSub <= '0';
 		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
 		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
 		inZ <= (others => '0');
 		theta <= (31 downto 1 => '0', 0 => '1');
-		wait for clock_period*10;
-		assert signed(result_X) = (A+(B/(2**to_integer(signed(i)))))
-			report "Result was not 2"
-			severity warning;
-			
-		wait for clock_period*10;
 
-      -- insert stimulus here 
-		en <= '1';
-		i <= "00001";
+			
+		wait for clock_period;
+		
 		addSub <= '1';
 		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
 		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
 		inZ <= (others => '0');
 		theta <= (31 downto 1 => '0', 0 => '1');
-		wait for clock_period*2;
-		assert signed(result_X) = (A-(B/(2**to_integer(signed(i)))))
-			report "Expected " & integer'image(A-(B/(2**to_integer(signed(i))))) & 
-							" got " & integer'image(to_integer(signed(result_X)))
-			severity warning;
+
 			
-		--add more test cases
+		wait for clock_period;
 		
+		m <= "01";
+		addSub <= '0';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+
+			
+		wait for clock_period;
+		
+		addSub <= '1';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+
+			
+		wait for clock_period;
+		
+		m <= "10";
+		addSub <= '0';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+
+			
+		wait for clock_period;
+		
+		addSub <= '1';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+
+			
+		wait for clock_period;
+		
+		m <= "11";
+		addSub <= '0';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+
+			
+		wait for clock_period;
+		
+		addSub <= '1';
+		inX <= std_logic_vector(to_signed(A,32)); --(31 downto 1 => '0', 0 => '1'); 
+		inY <= std_logic_vector(to_signed(B,32)); --(31 downto 2 => '0', 1 => '1', 0 => '0');
+		inZ <= (others => '0');
+		theta <= (31 downto 1 => '0', 0 => '1');
+
+			
+		wait for clock_period;
+		
+			
       wait;
    end process;
 
